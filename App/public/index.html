@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arduino Data Viewer</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f4f4f4;
+    } 
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #007bff;
+      color: white;
+    }
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+  </style>
+</head>
+<body>
+  <h1>Real-Time Arduino Data</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Timestamp</th>
+        <th>Data</th>
+      </tr>
+    </thead>
+    <tbody id="data-table">
+    </tbody>
+  </table>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+    const table = document.getElementById("data-table");
+
+    socket.on("data", (message) => {
+      const row = document.createElement("tr");
+      const timestampCell = document.createElement("td");
+      const dataCell = document.createElement("td");
+
+      timestampCell.textContent = message.timestamp;
+      dataCell.textContent = message.data;
+
+      row.appendChild(timestampCell);
+      row.appendChild(dataCell);
+      table.appendChild(row);
+    });
+  </script>
+</body>
+</html>
